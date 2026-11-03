@@ -15,6 +15,7 @@ body {
     overflow: hidden;
     position: relative;
     color: #e8d5c4;
+    cursor: default;
 }
 
 body::before {
@@ -38,24 +39,38 @@ body::before {
         inset 0 0 60px rgba(80, 20, 30, 0.2);
     border: 1px solid rgba(140, 40, 50, 0.4);
     position: relative;
+    transition: box-shadow 0.4s ease;
 }
 
-.container::before,
-.container::after {
-    content: '†';
+.container:hover {
+    box-shadow: 
+        0 0 50px rgba(80, 20, 30, 0.4),
+        inset 0 0 60px rgba(80, 20, 30, 0.25);
+}
+
+.ornament {
     position: absolute;
     font-family: 'Cinzel', serif;
     font-size: 1.4em;
     color: rgba(180, 50, 60, 0.5);
+    cursor: pointer;
+    transition: color 0.3s, transform 0.3s;
+    user-select: none;
+    z-index: 20;
 }
 
-.container::before {
+.ornament:hover {
+    color: rgba(220, 70, 80, 0.9);
+    transform: scale(1.2);
+}
+
+.top-left {
     top: 12px;
     left: 20px;
 }
 
-.container::after {
-    bottom: 12px;
+.top-right {
+    top: 12px;
     right: 20px;
 }
 
@@ -68,6 +83,7 @@ h1 {
     text-transform: uppercase;
     text-shadow: 0 0 20px rgba(201, 168, 124, 0.3);
     font-weight: 400;
+    cursor: default;
 }
 
 .countdown {
@@ -86,6 +102,11 @@ h1 {
     border: 1px solid rgba(140, 40, 50, 0.35);
     box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.4);
     position: relative;
+    transition: transform 0.3s;
+}
+
+.time-unit:hover {
+    transform: translateY(-4px);
 }
 
 .time-unit::before {
@@ -134,9 +155,16 @@ h1 {
     top: 50%;
     transform: translateY(-50%);
     filter: drop-shadow(0 0 20px rgba(180, 30, 50, 0.7));
-    transition: left 0.8s ease-out, right 0.8s ease-out;
+    transition: left 0.8s ease-out, right 0.8s ease-out, filter 0.3s;
     animation: float 5s ease-in-out infinite;
     opacity: 0.9;
+    pointer-events: auto;
+    cursor: pointer;
+    user-select: none;
+}
+
+.heart:hover {
+    filter: drop-shadow(0 0 30px rgba(220, 50, 70, 0.95));
 }
 
 .heart.left {
@@ -175,6 +203,112 @@ h1 {
     opacity: 1;
 }
 
+.letter-btn {
+    margin-top: 35px;
+    background: transparent;
+    border: 1px solid rgba(140, 40, 50, 0.6);
+    color: #c9a87c;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 2px;
+    padding: 12px 28px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    font-size: 0.9em;
+}
+
+.letter-btn:hover {
+    background: rgba(80, 20, 30, 0.3);
+    border-color: rgba(180, 50, 60, 0.8);
+    box-shadow: 0 0 15px rgba(140, 40, 50, 0.3);
+}
+
+.letter {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.6s ease, margin-top 0.6s ease, opacity 0.4s;
+    opacity: 0;
+    margin-top: 0;
+}
+
+.letter.open {
+    max-height: 500px;
+    margin-top: 30px;
+    opacity: 1;
+}
+
+.letter-inner {
+    background: rgba(15, 5, 8, 0.7);
+    border: 1px solid rgba(140, 40, 50, 0.3);
+    padding: 30px 35px;
+    text-align: left;
+    font-size: 1.15em;
+    line-height: 1.7;
+    color: #e8d5c4;
+}
+
+.letter-greeting {
+    font-style: italic;
+    color: #c9a87c;
+    margin-bottom: 15px;
+}
+
+.letter-signature {
+    margin-top: 20px;
+    text-align: right;
+    font-style: italic;
+    color: #c9a87c;
+}
+
+.close-letter {
+    display: block;
+    margin: 25px auto 0;
+    background: transparent;
+    border: 1px solid rgba(140, 40, 50, 0.5);
+    color: #a08070;
+    padding: 8px 20px;
+    cursor: pointer;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 1px;
+}
+
+.whisper {
+    position: fixed;
+    pointer-events: none;
+    font-style: italic;
+    color: #c9a87c;
+    opacity: 0;
+    transition: opacity 0.8s, transform 0.8s;
+    z-index: 100;
+    font-size: 1.3em;
+    text-shadow: 0 0 10px rgba(0,0,0,0.8);
+}
+
+.whisper.show {
+    opacity: 1;
+    transform: translateY(-20px);
+}
+
+.secret {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(10, 4, 6, 0.9);
+    border: 1px solid rgba(140, 40, 50, 0.5);
+    padding: 15px 25px;
+    color: #c9a87c;
+    font-style: italic;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1s;
+    z-index: 50;
+}
+
+.secret.show {
+    opacity: 1;
+}
+
 .particles {
     position: absolute;
     width: 100%;
@@ -202,12 +336,4 @@ h1 {
         transform: translateY(110vh);
         opacity: 0;
     }
-}
-
-.ornament {
-    position: absolute;
-    font-size: 1.2em;
-    color: rgba(140, 40, 50, 0.3);
-    font-family: 'Cinzel', serif;
-    pointer-events: none;
 }

@@ -1,13 +1,24 @@
 // Target: February 7, 2027 at midnight
-const targetDate = new Date('2027-02-07T16:00:00').getTime();
+const targetDate = new Date('2027-02-07T00:00:00').getTime();
 
 // Reference start date for progress calculation
 const startDate = new Date('2026-11-03T00:00:00').getTime();
 const totalDuration = targetDate - startDate;
 
+const phrases = [
+    "I choose you, still.",
+    "Closer every day.",
+    "This heart is yours.",
+    "Waiting for you.",
+    "Forever, if you'll have me."
+];
+
+let ornamentClicks = 0;
+const secretThreshold = 5;
+
 function createParticles() {
     const container = document.getElementById('particles');
-    for (let i = 0; i < 25; i++) {
+    for (let i = 0; i < 30; i++) {
         const p = document.createElement('div');
         p.className = 'particle';
         const size = Math.random() * 6 + 2;
@@ -18,6 +29,15 @@ function createParticles() {
         p.style.animationDelay = (Math.random() * 10) + 's';
         container.appendChild(p);
     }
+}
+
+function showWhisper(text, x, y) {
+    const whisper = document.getElementById('whisper');
+    whisper.textContent = text;
+    whisper.style.left = (x - 80) + 'px';
+    whisper.style.top = (y - 40) + 'px';
+    whisper.classList.add('show');
+    setTimeout(() => whisper.classList.remove('show'), 1800);
 }
 
 function updateCountdown() {
@@ -37,7 +57,6 @@ function updateCountdown() {
         minutesEl.textContent = '00';
         messageEl.classList.add('show');
 
-        // Hearts meet in the center
         leftHeart.style.left = 'calc(50% - 50px)';
         leftHeart.style.right = 'auto';
         rightHeart.style.right = 'calc(50% - 50px)';
@@ -55,11 +74,9 @@ function updateCountdown() {
     hoursEl.textContent = String(hours).padStart(2, '0');
     minutesEl.textContent = String(minutes).padStart(2, '0');
 
-    // Progress from 0 (start) to 1 (target date)
     const elapsed = Math.max(0, now - startDate);
     const progress = Math.min(1, elapsed / totalDuration);
 
-    // Move hearts closer: from ~7% to ~42%
     const startPos = 7;
     const endPos = 42;
     const currentPos = startPos + (endPos - startPos) * progress;
@@ -67,6 +84,61 @@ function updateCountdown() {
     leftHeart.style.left = currentPos + '%';
     rightHeart.style.right = currentPos + '%';
 }
+
+// Letter open/close
+document.getElementById('letterBtn').addEventListener('click', () => {
+    document.getElementById('letter').classList.add('open');
+    document.getElementById('letterBtn').style.display = 'none';
+});
+
+document.getElementById('closeLetter').addEventListener('click', () => {
+    document.getElementById('letter').classList.remove('open');
+    document.getElementById('letterBtn').style.display = 'inline-block';
+});
+
+// Heart interactions
+document.getElementById('heartLeft').addEventListener('click', (e) => {
+    const phrase = phrases[Math.floor(Math.random() * phrases.length)];
+    showWhisper(phrase, e.clientX, e.clientY);
+});
+
+document.getElementById('heartRight').addEventListener('click', (e) => {
+    const phrase = phrases[Math.floor(Math.random() * phrases.length)];
+    showWhisper(phrase, e.clientX, e.clientY);
+});
+
+// Easter egg: click the ornaments
+function handleOrnamentClick() {
+    ornamentClicks++;
+    if (ornamentClicks >= secretThreshold) {
+        document.getElementById('secret').classList.add('show');
+        setTimeout(() => {
+            document.getElementById('secret').classList.remove('show');
+        }, 4000);
+        ornamentClicks = 0;
+    }
+}
+
+document.getElementById('ornament1').addEventListener('click', handleOrnamentClick);
+document.getElementById('ornament2').addEventListener('click', handleOrnamentClick);
+
+// Subtle mouse influence on hearts (gentle lean)
+document.addEventListener('mousemove', (e) => {
+    const hearts = document.querySelectorAll('.heart');
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
+    const deltaX = (e.clientX - centerX) / centerX;
+    const deltaY = (e.clientY - centerY) / centerY;
+
+    hearts.forEach(heart => {
+        if (!heart.classList.contains('met')) {
+            const rotate = deltaX * 3;
+            const currentTransform = heart.style.transform || 'translateY(-50%)';
+            // Keep the float animation mostly, add slight influence
+            heart.style.transform = `translateY(-50%) rotate(${rotate}deg)`;
+        }
+    });
+});
 
 createParticles();
 updateCountdown();
