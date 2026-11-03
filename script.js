@@ -1,5 +1,5 @@
 // Target: February 7, 2027 at midnight
-const targetDate = new Date('2027-02-07T00:00:00').getTime();
+const targetDate = new Date('2027-02-07T16:00:00').getTime();
 
 // Reference start date for progress calculation
 const startDate = new Date('2026-11-03T00:00:00').getTime();
