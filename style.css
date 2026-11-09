@@ -334,7 +334,7 @@ h3 {
 .gallery-item img {
     width: 100%;
     max-width: 260px;
-    height: 280px;
+    height: 480px;
     object-fit: cover;
     border: 1px solid rgba(140, 40, 50, 0.5);
     margin-bottom: 10px;
